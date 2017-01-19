@@ -1,0 +1,51 @@
+%%
+%% This is file `wtpreset.sty'.
+%%
+%% Copyright (c) 2017 Takuto ASAKURA (wtsnjp)
+%%   GitHub:   https://github.com/wtsnjp
+%%   Twitter:  @wtsnjp
+%%
+%% This package is distributed under the MIT License.
+%%
+
+% Package declaration
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{wtpreset}[2017/01/19 dev]
+\def\wtpr@pkgname{wtpreset}
+
+% Messages
+\def\wtpr@info{\PackageInfo\wtpr@pkgname}
+\def\wtpr@warn{\PackageWarningNoLine\wtpr@pkgname}
+\def\wtpr@error{\PackageError\wtpr@pkgname}
+
+% Package options: set preset name
+\let\wtpr@preset@name\relax
+\DeclareOption*{
+  \ifx\wtpr@preset@name\relax
+    \edef\wtpr@preset@name{\CurrentOption}
+  \else
+    \wtpr@error
+      {You can use only one preset}
+      {Preset `\wtpr@preset@name' has been loaded}
+  \fi}
+\ProcessOptions\relax
+
+% Load a preset
+\ifx\wtpr@preset@name\relax
+  \wtpr@warn{No preset is loaded}
+\else
+  \IfFileExists{wtpreset-\wtpr@preset@name.def}{
+    \edef\wtpr@atcode{\the\catcode`\@} \makeatletter
+    \input{wtpreset-\wtpr@preset@name.def}
+    \catcode`\@=\wtpr@atcode
+  }{
+    \wtpr@error
+      {Preset `\wtpr@preset@name' does not exist}
+      {Please check the spelling}
+  }
+\fi
+
+% All done
+\endinput
+
+%% EOF

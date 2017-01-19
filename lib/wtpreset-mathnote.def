@@ -1,0 +1,155 @@
+%%
+%% This is file `wtpreset-mathnote.def'.
+%%
+%% Copyright (c) 2017 Takuto ASAKURA (wtsnjp)
+%%   GitHub:   https://github.com/wtsnjp
+%%   Twitter:  @wtsnjp
+%%
+%% This package is distributed under the MIT License.
+%%
+
+% Preset declaration
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesFile{wtpreset-mathnote.def}[2017/01/19 dev]
+
+% ------------------------------------------ Basic settings
+
+% Set document style (With WTStyle)
+\RequirePackage{wtstyle}
+
+\setdocstyle{
+  packages = {
+    [T1]fontenc, otf, amsmath, newtxmath, newtxtext,
+    geometry, makeidx, hyperref, pxjahyper,
+    siunitx, enumitem, pxrubrica,
+    graphicx, tikz, bussproofs,
+    wtref, wtmath},
+  footnotemark = \arabic{footnote}\wtst@eparen,
+  emphstyle = \gtfamily\sffamily,
+  defaultparent = chapter,
+  footnoteparent = page}
+
+% Names of theorem environments
+\newcommand{\definitionname}{定義}
+\newcommand{\theoremname}{定理}
+\newcommand{\lemmaname}{補題}
+\newcommand{\examplename}{例}
+\newcommand{\proofname}{証明}
+
+% ---- enumitem ----
+\newlist{proofcases}{enumerate}{2}
+\setlist[proofcases]{leftmargin=*, nosep}
+\setlist[proofcases,1]{label=(\roman*), widest=iii}
+
+% ---- ref ----
+\newref[scope=chapter]{fig, tab, ex, eq, th}
+\setrefstyle{fig}{prefix=図}
+\setrefstyle{tab}{prefix=表}
+\setrefstyle{ex}{prefix=例}
+\setrefstyle{eq}{refcmd=(\ref{#1})}
+
+% ---- math ----
+\usemathlibrary{set}
+\exchangecmd{\emptyset}{\varnothing}
+
+% Other settings
+% TODO: these settings shoud be treated with WTStyle
+
+%% graphicx
+\newcommand{\setimgpath}[1]{%
+  \graphicspath{{./img/#1}}%
+  \def\imgsource##1{\input{img/#1/##1}}}
+\setimgpath{\jobname}
+\newcommand{\docsource}[1]{\bgroup\setimgpath{#1}\input{#1}\egroup}
+
+%% hyperref
+\renewcommand\UrlFont{\rmfamily}
+
+%% index
+\makeindex
+
+% ------------------------------------------ TeX on LaTeX
+
+% Utilities
+\def\wtpr@ifundefined#1{\@ifundefined{wtpr@#1}}
+\def\wtpr@if@option@exists{\@ifnextchar[}
+\def\wtpr@environment@with@option#1[#2]{\begin{wtpr@#1}[#2]}
+\def\wtpr@environment@without@option#1{\begin{wtpr@#1}}
+
+% Packages and settings
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+\newtcolorbox{wtpr@mathbox}{
+  enhanced jigsaw, breakable, sharp corners, colback=white,
+  before={\par\pagebreak[0]\parindent=0pt\vspace{7pt}}, after={},
+  left=2mm, right=2mm}
+
+% Symbols
+\chardef\wtpr@bparen`( \chardef\wtpr@eparen`)
+
+% Heading
+\def\@makeschapterhead#1{%
+  \hbox{}\normalsize
+  \vskip\baselineskip
+  \hrule\@height.6\p@\@depth.6\p@\vskip2\p@\hrule\@height.3\p@\@depth.3\p@
+  \vskip.5\baselineskip
+  \begingroup\centering
+    \reset@font\LARGE\bfseries#1%
+  \par\endgroup
+  \ifdim\prevdepth>-\@m\p@\vskip-\prevdepth\fi
+  \vskip.5\baselineskip
+  \hrule\@height.3\p@\@depth.3\p@\vskip2\p@\hrule\@height.6\p@\@depth.6\p@
+  \vskip\baselineskip}
+\def\@makechapterhead#1{%
+  \hbox{}\normalsize
+  \vskip\baselineskip
+  \hrule\@height.6\p@\@depth.6\p@\vskip2\p@\hrule\@height.3\p@\@depth.3\p@
+  \vskip.5\baselineskip
+  \begingroup\centering\bfseries
+    \@chapapp
+    {\mdseries\sffamily\Large\thechapter}%
+    \@chappos\\
+    \LARGE#1%
+  \par\endgroup
+  \ifdim\prevdepth>-\@m\p@\vskip-\prevdepth\fi
+  \vskip.5\baselineskip
+  \hrule\@height.3\p@\@depth.3\p@\vskip2\p@\hrule\@height.6\p@\@depth.6\p@
+  \vskip\baselineskip}
+
+% Theorem environments
+\newtheorem{wtpr@theorem}{\theoremname}[chapter]
+\newtheorem{wtpr@definition}[wtpr@theorem]{\definitionname}
+\newtheorem{wtpr@lemma}[wtpr@theorem]{\lemmaname}
+
+\newenvironment{definition}
+  {\begin{wtpr@mathbox}
+    \wtpr@if@option@exists
+      {\wtpr@environment@with@option{definition}}
+      {\wtpr@environment@without@option{definition}}}
+  {\end{wtpr@definition}\end{wtpr@mathbox}}
+\newenvironment{theorem}
+  {\begin{wtpr@mathbox}
+    \wtpr@if@option@exists
+      {\wtpr@environment@with@option{theorem}}
+      {\wtpr@environment@without@option{theorem}}}
+  {\end{wtpr@theorem}\end{wtpr@mathbox}}
+\newenvironment{lemma}
+  {\begin{wtpr@mathbox}
+    \wtpr@if@option@exists
+      {\wtpr@environment@with@option{lemma}}
+      {\wtpr@environment@without@option{lemma}}}
+  {\end{wtpr@lemma}\end{wtpr@mathbox}}
+\newenvironment{example}
+  {\par\normalfont\topsep6\p@\@plus6\p@\labelsep=1zw
+    \refstepcounter{wtpr@theorem}\trivlist
+    \item[\hskip\labelsep{\headfont\examplename\thewtpr@theorem}]\ignorespaces}
+  {\endtrivlist}
+\newenvironment{proof}
+  {\normalfont\topsep6\p@\@plus6\p@\labelsep=1zw
+    \trivlist\item[\hskip\labelsep{\headfont\proofname}]\ignorespaces}
+  {\endtrivlist}
+
+% All done
+\endinput
+
+%% EOF
