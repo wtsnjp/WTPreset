@@ -10,13 +10,11 @@
 
 % Preset declaration
 \NeedsTeXFormat{pLaTeX2e}
-\ProvidesFile{wtpreset-mathnote.def}[2017/01/19 dev]
-
-% ------------------------------------------ Basic settings
-
-% Set document style (With WTStyle)
 \RequirePackage{wtstyle}
 
+% ------------------------------------------ LaTeX settings
+
+% Set document style (with WTStyle)
 \setdocstyle{
   packages = {
     [T1]fontenc, otf, amsmath, newtxmath, newtxtext,
@@ -24,10 +22,10 @@
     siunitx, enumitem, pxrubrica,
     graphicx, tikz, bussproofs,
     wtref, wtmath},
-  footnotemark = \arabic{footnote}\wtst@eparen,
-  emphstyle = \gtfamily\sffamily,
-  defaultparent = chapter,
-  footnoteparent = page}
+  footnotemark = \arabic{footnote}),
+  emph style = \gtfamily\sffamily,
+  url style = \normalfont,
+  parent counter = chapter}
 
 % Names of theorem environments
 \newcommand{\definitionname}{定義}
@@ -36,20 +34,19 @@
 \newcommand{\examplename}{例}
 \newcommand{\proofname}{証明}
 
-% ---- enumitem ----
+% List environment: proofcases
 \newlist{proofcases}{enumerate}{2}
 \setlist[proofcases]{leftmargin=*, nosep}
 \setlist[proofcases,1]{label=(\roman*), widest=iii}
 
-% ---- ref ----
+% Cross reference
 \newref[scope=chapter]{fig, tab, ex, eq, th}
 \setrefstyle{fig}{prefix=図}
 \setrefstyle{tab}{prefix=表}
 \setrefstyle{ex}{prefix=例}
 \setrefstyle{eq}{refcmd=(\ref{#1})}
 
-% ---- math ----
-\usemathlibrary{set}
+% Mathematics
 \exchangecmd{\emptyset}{\varnothing}
 
 % Other settings

@@ -35,10 +35,11 @@
   \wtpr@warn{No preset is loaded}
 \else
   \IfFileExists{wtpreset-\wtpr@preset@name.def}{
+    \wtpr@info{Load preset `\wtpr@preset@name'}
     \edef\wtpr@atcode{\the\catcode`\@} \makeatletter
     \input{wtpreset-\wtpr@preset@name.def}
     \catcode`\@=\wtpr@atcode
-  }{
+  }{% else
     \wtpr@error
       {Preset `\wtpr@preset@name' does not exist}
       {Please check the spelling}
