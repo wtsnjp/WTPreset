@@ -18,14 +18,12 @@
 \setdocstyle{
   packages = {
     [T1]fontenc, otf, amsmath, newtxmath, newtxtext,
-    geometry, makeidx, hyperref, pxjahyper,
-    siunitx, enumitem, pxrubrica,
-    graphicx, tikz, bussproofs,
+    geometry, makeidx, hyperref, pxjahyper, pxrubrica,
+    siunitx, enumitem, graphicx, tikz,
     wtref, wtmath},
   footnotemark = \arabic{footnote}),
   emph style = \gtfamily\sffamily,
-  url style = \normalfont,
-  parent counter = chapter}
+  url style = \normalfont}
 
 % Names of theorem environments
 \newcommand{\definitionname}{定義}
@@ -58,9 +56,6 @@
   \def\imgsource##1{\input{img/#1/##1}}}
 \setimgpath{\jobname}
 \newcommand{\docsource}[1]{\bgroup\setimgpath{#1}\input{#1}\egroup}
-
-%% hyperref
-\renewcommand\UrlFont{\rmfamily}
 
 %% index
 \makeindex
