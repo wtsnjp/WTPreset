@@ -19,9 +19,9 @@
   packages = {
     [T1]fontenc, otf, amsmath, newtxmath, newtxtext,
     geometry, makeidx, hyperref, pxjahyper, pxrubrica,
-    siunitx, enumitem, graphicx, tikz,
+    siunitx, enumitem, xcolor, graphicx, tikz,
     wtref, wtmath},
-  footnotemark = \arabic{footnote}),
+  footnote mark = \arabic{footnote}),
   emph style = \gtfamily\sffamily,
   url style = \normalfont}
 
@@ -35,7 +35,7 @@
 % List environment: proofcases
 \newlist{proofcases}{enumerate}{2}
 \setlist[proofcases]{leftmargin=*, nosep}
-\setlist[proofcases,1]{label=(\roman*), widest=iii}
+\setlist[proofcases,1]{label=(\roman*), widest=iii, labelsep*=.5em}
 
 % Cross reference
 \newref[scope=chapter]{fig, tab, ex, eq, th}
@@ -47,10 +47,22 @@
 % Mathematics
 \exchangecmd{\emptyset}{\varnothing}
 
+% Edit commands
+\newcommand{\NeedsRevision}{%
+  \vspace{1zh}%
+  \par\noindent\bgroup\color{red}\leaders\hbox{・}\hfill 要加筆！\unskip\egroup\par
+  \vspace{1zh}}
+
 % Other settings
 % TODO: these settings shoud be treated with WTStyle
 
-%% graphicx
+%% Commands for splited files
+\newcommand{\DeclareMain}{\usepackage{docmute}}
+\newcommand{\DeclareSub}{\wtst@declare@sub}
+\def\wtst@declare@sub{\wtst@if@option@exists{\wtst@@declare@sub}{\wtst@@@declare@sub}}
+\def\wtst@@declare@sub[#1]{\setcounter{chapter}{\numexpr #1-1}}
+\def\wtst@@@declare@sub{}
+
 \newcommand{\setimgpath}[1]{%
   \graphicspath{{./img/#1}}%
   \def\imgsource##1{\input{img/#1/##1}}}
@@ -73,7 +85,8 @@
 \tcbuselibrary{skins, breakable}
 \newtcolorbox{wtpr@mathbox}{
   enhanced jigsaw, breakable, sharp corners, colback=white,
-  before={\par\pagebreak[0]\parindent=0pt\vspace{7pt}}, after={},
+  before={\par\pagebreak[0]\parindent=0pt}, after={},
+  before skip=15pt plus 2pt, after skip=15pt plus 2pt,
   left=2mm, right=2mm}
 
 % Symbols
@@ -107,6 +120,9 @@
   \vskip.5\baselineskip
   \hrule\@height.3\p@\@depth.3\p@\vskip2\p@\hrule\@height.6\p@\@depth.6\p@
   \vskip\baselineskip}
+
+% Abstract environment
+\renewenvironment{abstract}{}{}
 
 % Theorem environments
 \newtheorem{wtpr@theorem}{\theoremname}[chapter]
